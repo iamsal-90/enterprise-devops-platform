@@ -38,3 +38,29 @@ module "iam" {
     Owner          = "DevOps-Team"
   }
 }
+
+module "eks" {
+  source = "../../modules/eks"
+
+  project_name     = var.project_name
+  environment      = var.environment
+  cluster_version  = "1.36"
+  
+  # تزریق آی‌دی سابنت‌های خصوصی از ماژول VPC
+  subnet_ids       = module.vpc.private_subnet_ids
+  
+  # تزریق ARNهای ساخته شده در ماژول IAM
+  cluster_role_arn = module.iam.eks_cluster_role_arn
+  node_role_arn    = module.iam.eks_node_role_arn
+
+  # تنظیمات سایز برای محیط dev
+  instance_types   = ["t3.micro"]
+  desired_size     = 1
+  max_size         = 3
+  min_size         = 1
+
+  tags = {
+    Infrastructure = "Kubernetes"
+    Owner          = "DevOps-Team"
+  }
+}
