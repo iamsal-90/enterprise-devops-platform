@@ -54,8 +54,8 @@ module "eks" {
   node_role_arn    = module.iam.eks_node_role_arn
 
   # تنظیمات سایز برای محیط dev
-  instance_types   = ["t3.micro"]
-  desired_size     = 1
+  instance_types   = ["t3.small"]
+  desired_size     = 2
   max_size         = 3
   min_size         = 1
 
@@ -63,4 +63,15 @@ module "eks" {
     Infrastructure = "Kubernetes"
     Owner          = "DevOps-Team"
   }
+}
+
+module "argocd" {
+  source = "../../modules/argocd"
+
+  environment = var.environment
+
+  # ایجاد وابستگی تا ابتدا کلاستر کلاً ساخته و آماده شود و بعد هلم شروع به کار کند
+  depends_on = [
+    module.eks
+  ]
 }
