@@ -12,6 +12,8 @@ spec:
     helm:
       values: |
         clusterName: "edp-cluster-dev"
+        awsRegion: "eu-central-1"
+        vpcId: "vpc-0455d5b5f2820752b"
         serviceAccount:
           create: true
           name: aws-load-balancer-controller
